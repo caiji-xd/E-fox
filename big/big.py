@@ -1,14 +1,16 @@
 #import pyautogui
 import random
 import tkinter as tk
-import threading
-import win32api
-import time
+# import threading
+# import win32api
+# import time
+# import psutil
 
 from win32api import GetMonitorInfo, MonitorFromPoint
 window = tk.Tk()
 screen_width = window.winfo_screenwidth()
-x = screen_width - 100
+pic_size = 1000
+x = screen_width - pic_size
 cycle = 0
 check = 1
 idle_num = [1, 2]
@@ -23,16 +25,32 @@ work_area = monitor_info.get("Work")
 print("The taskbar height is {}.".format(monitor_area[3]-work_area[3]))
 taskbar_height= monitor_area[3]-work_area[3]
 print(work_area[3])#1050
-def dupe_myself():
-    win32api.ShellExecute(0,'open','bug.exe',"",'F:\E fox',0)
-
-def schedule_dupe():
-    # 随机选择时间
-    time_to_wait = random.randint(114514, 480000)  # 、time to ms
-    window.after(time_to_wait, lambda: threading.Thread(target=dupe_myself).start())
-    # 再次调用schedule_dupe以循环此过程
-    window.after(time_to_wait, schedule_dupe)
+# def dupe_myself():
+#     win32api.ShellExecute(0,'open','bug.exe',"",'',0)
+#
+# def schedule_dupe():
+#     # 随机选择时间
+#     time_to_wait = random.randint(114514, 480000)  # 、time to ms
+#     window.after(time_to_wait, lambda: threading.Thread(target=dupe_myself).start())
+#     # 再次调用schedule_dupe以循环此过程
+#     window.after(time_to_wait, schedule_dupe)
+#
+# def kill_process_by_name(process_name):
+#     for proc in psutil.process_iter(['name']):
+#         if proc.info['name'] == process_name:
+#             proc.kill()
+#
+# def schedule_kill():
+#     # 随机选择时间
+#     time_to_wait = random.randint(114514, 480000)  # 、time to ms
+#     window.after(time_to_wait, lambda: threading.Thread(target=kill_process_by_name('bug.exe')).start())
+#     # 再次调用schedule_dupe以循环此过程
+#     window.after(time_to_wait, schedule_kill)
+# # 示例使用
+# # kill_process_by_name('bug.exe')
+#
 # schedule_dupe()
+# schedule_kill()
 # transfer random no. to event
 def event(cycle, check, event_number, x):
     if event_number in idle_num:
@@ -102,14 +120,14 @@ def update(cycle, check, event_number, x):
         frame = walk_negative[cycle]
         cycle, event_number = gif_work(cycle, walk_negative, event_number, 1, 9)
         x += 3
-        if x > window.winfo_screenwidth() - 100:  # 如果超出窗口最右边
-            x = window.winfo_screenwidth() - 100
+        if x > window.winfo_screenwidth() - pic_size:  # 如果超出窗口最右边
+            x = window.winfo_screenwidth() - pic_size
             check = 4  # 反方向行走
 
     screen_height = window.winfo_screenheight()
 
     # 设置窗口位置
-    window.geometry('1000x1000+' + str(x) + '+' + str(screen_height-1000-taskbar_height))
+    window.geometry(str(pic_size)+'x'+str(pic_size)+'+' + str(x) + '+' + str(screen_height-pic_size-taskbar_height))
     # window.geometry('100x100+'+str(x)+'+716')#啊呀这个屎山堆
     label.configure(image=frame)
     window.after(1, event, cycle, check, event_number, x)
